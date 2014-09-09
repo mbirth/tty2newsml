@@ -6,34 +6,36 @@ import IPTCMessage
 
 class _main(object):
     def __init__(self, port='/dev/tty706'):
-        self.openPort(port)
+        ser = self.openPort(port)
         while True:
-            msg = self.waitForStart()
-            msg += self.readUntilEOM()
-            print("This is the message: %s" % repr(msg))
+            msg = self.waitForStart(ser)
+            msg += self.readUntilEOM(ser)
+            iptc = IPTCMessage(msg)
 
     def openPort(self, port):
-        self.port = serial.Serial(port, baudrate=4800, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
-        print("%s opened with %i baud. Timeout is %s seconds." % (self.port.name, self.port.baudrate, self.port.timeout))
+        ser = serial.Serial(port=port, baudrate=4800, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
+        print("%s opened with %i baud. Timeout is %s seconds." % (ser.name, ser.baudrate, ser.timeout))
+        return ser
 
-    def waitForStart(self):
-        print("Waiting for start indicator: ", end='', flush=True)
+    def waitForStart(self, ser):
+        print("Waiting for start indicator (%i): " % ser.inWaiting(), end='', flush=True)
         while True:
-            byte = self.port.read()
+            byte = ser.read(size=1)
             print(".", end='', flush=True)
             if byte == b'\x01':
                 print("Found.")
                 return byte
 
-    def readUntilEOM(self):
+    def readUntilEOM(self, ser):
         print("Reading data until EOM.", end='', flush=True)
         msg = b''
         ctr = 0
         while True:
-            byte = self.port.read()
+            print("%i>" % ser.inWaiting(), end='', flush=True)
+            byte = ser.read(size=1)
             ctr+=1
-            if ctr % 10 is 0:
-                print(".", end='', flush=True)
+#            if ctr % 10 is 0:
+            print(".", end='', flush=True)
             if byte == b'\x01':
                 print("PROBLEM: Got start indicator, but message not yet finished.")
                 break
@@ -43,8 +45,8 @@ class _main(object):
         print("Got %i bytes." % len(msg))
         return msg
 
-    def readLine(self):
-        rcv = self.port.readline()
+    def readLine(self, ser):
+        rcv = ser.readline()
         print("Got: %s" % repr(rcv))
 
 if __name__=='__main__':
