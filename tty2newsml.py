@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import serial
-import IPTCMessage
+import iptcmessage
 
 class _main(object):
-    def __init__(self, port='/dev/tty706'):
+    def __init__(self, port='/dev/tty700'):
         ser = self.openPort(port)
         while True:
             msg = self.waitForStart(ser)
             msg += self.readUntilEOM(ser)
-            iptc = IPTCMessage(msg)
+            iptc = iptcmessage.IPTCMessage(msg)
 
     def openPort(self, port):
         ser = serial.Serial(port=port, baudrate=4800, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
