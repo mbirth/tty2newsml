@@ -4,6 +4,7 @@
 class IPTCMessage(object):
     def __init__(self, raw):
         self.raw = raw
+        self.length = len(self.raw)
         print("Message: %s" % repr(self.raw))
 
 if __name__=='__main__':
