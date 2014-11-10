@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<newsMessage xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/1999/xhtml">
+    <header>
+        <sent></sent>
+        <sender>{{ header.source_id }}</sender>
+        <priority>{{ header.priority }}</priority>
+    </header>
+    <itemSet>
+        <newsItem>
+            <itemMeta>
+                <itemClass qcode="icls:text" />
+            </itemMeta>
+            <contentMeta>
+                <altId type="idType:USN">{{ header.message_no }}</altId>
+                <subject qcode="subj:{{ header.category }}" />
+                <slugline separator="-">{{ header.keywords }}</slugline>
+                <headline></headline>
+            </contentMeta>
+            <contentSet>
+                <inlineXML contenttype="application/xhtml+html" wordcount="{{ header.word_count }}">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <head>
+                            <title />
+                        </head>
+                        <body>
+                            <p>
+                            {{ text }}
+                            </p>
+                        </body>
+                    </html>
+                </inlineXML>
+            </contentSet>
+        </newsItem>
+    </itemSet>
+</newsMessage>

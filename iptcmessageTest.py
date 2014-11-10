@@ -16,7 +16,9 @@ class IPTCMessageTestCase(unittest.TestCase):
 
     def testMessageParsing(self):
         iptc = iptcmessage.IPTCMessage(DPATEST)
+        print(iptc.getNewsML())
         iptc = iptcmessage.IPTCMessage(TEST1)
+        print(iptc.getNewsML())
         self.assertGreater(iptc.length, 0)
 
 if __name__=='__main__':

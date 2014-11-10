@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import pystache
 import re
 
 class IPTCMessage(object):
@@ -12,9 +13,10 @@ class IPTCMessage(object):
         (self.fullheader, leftover) = self.raw[1:-1].split(b'\x02', 2)
         (self.text, self.posttext) = leftover.split(b'\x03', 2)
         self.parseHeader()
+        self.parseText()
         self.parsePostText()
         print("Header: " + repr(self.header))
-        print("Main text: " + self.text.decode("latin1"))
+        print("Main text: " + self.text)
         print("Post-text: " + repr(self.posttext))
         print("Post-data: " + repr(self.postdata))
 #        print("Message: %s" % repr(self.raw))
@@ -34,6 +36,10 @@ class IPTCMessage(object):
             "keywords": parts.group(7)
         }
 
+    def parseText(self):
+        self.text = self.text.decode("latin1")
+        pass
+
     def parsePostText(self):
         posttext = self.posttext.decode("latin1")
 #        posttext = "191552 MEZ sep 14blafasel"   # test string according to spec
@@ -52,7 +58,10 @@ class IPTCMessage(object):
         return self.raw
 
     def getNewsML(self):
-        return '<?xml encoding="utf-8"?><result>Not yet implemented.</result>'
+        renderer = pystache.Renderer()
+        tpl = renderer.load_template('newsml')
+        xml = renderer.render(tpl, self)
+        return xml
 
 if __name__=='__main__':
     print("Testmode!")
