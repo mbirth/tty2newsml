@@ -6,12 +6,16 @@
         <priority>{{ header.priority }}</priority>
     </header>
     <itemSet>
-        <newsItem>
+        <newsItem standard="NewsML-G2" standardVersion="2.10" conformance="power" xml:lang="de">
+            <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_3.xml" />
             <itemMeta>
                 <itemClass qcode="icls:text" />
+                <provider literal="N24_tty2NewsML.py" />
             </itemMeta>
             <contentMeta>
+                <urgency>{{ header.priority }}</urgency>
                 <altId type="idType:USN">{{ header.message_no }}</altId>
+                <language tag="de" />
                 <subject qcode="subj:{{ header.category }}" />
                 <slugline separator="-">{{ header.keywords }}</slugline>
                 <headline></headline>
