@@ -44,7 +44,7 @@ class ParsedTemplate(object):
             if type(node) is str:
                 return node
             return node.render(engine, context)
-        parts = map(get_unicode, self._parse_tree)
+        parts = list(map(get_unicode, self._parse_tree))
         s = ''.join(parts)
 
         return str(s)

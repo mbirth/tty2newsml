@@ -9,9 +9,10 @@ import re
 
 from pystache import defaults
 from pystache.parsed import ParsedTemplate
+import collections
 
 
-END_OF_LINE_CHARACTERS = [u'\r', u'\n']
+END_OF_LINE_CHARACTERS = ['\r', '\n']
 NON_BLANK_RE = re.compile(r'^(.)', re.M)
 
 
@@ -30,8 +31,8 @@ def parse(template, delimiters=None):
 
     Examples:
 
-    >>> parsed = parse(u"Hey {{#who}}{{name}}!{{/who}}")
-    >>> print str(parsed).replace('u', '')  # This is a hack to get the test to pass both in Python 2 and 3.
+    >>> parsed = parse("Hey {{#who}}{{name}}!{{/who}}")
+    >>> print(str(parsed).replace('u', ''))  # This is a hack to get the test to pass both in Python 2 and 3.
     ['Hey ', _SectionNode(key='who', index_begin=12, index_end=21, parsed=[_EscapeNode(key='name'), '!'])]
 
     """
@@ -94,7 +95,7 @@ class _CommentNode(object):
         return _format(self)
 
     def render(self, engine, context):
-        return u''
+        return ''
 
 
 class _ChangeNode(object):
@@ -106,7 +107,7 @@ class _ChangeNode(object):
         return _format(self)
 
     def render(self, engine, context):
-        return u''
+        return ''
 
 
 class _EscapeNode(object):
@@ -168,7 +169,7 @@ class _InvertedNode(object):
         # Note that lambdas are considered truthy for inverted sections
         # per the spec.
         if data:
-            return u''
+            return ''
         return self.parsed_section.render(engine, context)
 
 
@@ -193,7 +194,7 @@ class _SectionNode(object):
 
         parts = []
         for val in values:
-            if callable(val):
+            if isinstance(val, collections.Callable):
                 # Lambdas special case section rendering and bypass pushing
                 # the data value onto the context stack.  From the spec--
                 #
@@ -376,3 +377,4 @@ class _Parser(object):
             return _InvertedNode(tag_key, parsed_section)
 
         raise Exception("Invalid symbol for section tag: %s" % repr(tag_type))
+

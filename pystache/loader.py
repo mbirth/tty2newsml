@@ -86,7 +86,7 @@ class Loader(object):
     def _make_locator(self):
         return Locator(extension=self.extension)
 
-    def unicode(self, s, encoding=None):
+    def str(self, s, encoding=None):
         """
         Convert a string to unicode using the given encoding, and return it.
 
@@ -119,7 +119,7 @@ class Loader(object):
         if encoding is None:
             encoding = self.file_encoding
 
-        return self.unicode(b, encoding)
+        return self.str(b, encoding)
 
     def load_file(self, file_name):
         """
