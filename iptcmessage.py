@@ -38,6 +38,15 @@ class IPTCMessage(object):
 
     def parseText(self):
         self.text = self.text.decode("latin1")
+        lines = re.split(r'\r?\n', self.text)
+        # Check the first 3 lines for slug info, and extract if there
+        if lines[0][-1:] == "=" or lines[1][-1:] == "=" or lines[2][-1:] == "=":
+            (self.sluginfo, self.maintext) = re.split(r'=\r?\n', self.text)
+            self.sluginfo = self.sluginfo.strip()
+            self.maintext = self.maintext.strip()
+        else:
+            self.sluginfo = ""
+            self.maintext = self.text
         pass
 
     def parsePostText(self):
